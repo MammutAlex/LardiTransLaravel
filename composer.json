@@ -23,7 +23,10 @@
     "laravel": {
       "providers": [
         "MammutAlex\\LardiTransLaravel\\LardiTransServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "LardiTrans": "MammutAlex\\LardiTransLaravel\\LardiTransFacade"
+      }
     }
   }
 }

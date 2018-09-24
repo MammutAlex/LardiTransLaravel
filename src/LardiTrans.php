@@ -18,6 +18,11 @@ class LardiTrans
         $this->setAuth();
     }
 
+    public function __call(string $name, array $arguments): array
+    {
+        return $this->lardi->callMethod($name, $arguments[0] ?? []);
+    }
+
     private function setAuth()
     {
         $auth = Cache::rememberForever('larditrans.auth', function () {
@@ -32,10 +37,10 @@ class LardiTrans
     private function getAuth()
     {
         $data = [
-          'login'=>$this->config['login'],
-          'password'=>$this->config['password'],
+            'login' => $this->config['login'],
+            'password' => $this->config['password'],
         ];
-        if(!$this->config['is_password_hash']){
+        if (!$this->config['is_password_hash']) {
             $data['password'] = md5($data['password']);
         }
         return $this->lardi->callMethod('auth', $data);
