@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace MammutAlex\LardiTransLaravel;
 
 use Illuminate\Support\ServiceProvider;
 

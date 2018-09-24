@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace MammutAlex\LardiTransLaravel;
 
 use MammutAlex\LardiTrans\Exception\ApiErrorException;
 use \MammutAlex\LardiTrans\LardiTrans as BaseLardi;
