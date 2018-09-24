@@ -1,0 +1,29 @@
+{
+  "name": "mammut-alex/lardi-trans-laravel",
+  "description": "Laravel API client for Lardi-Trans",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alex Kovalchuk",
+      "email": "alex@cargofy.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "mammut-alex/lardi-trans": "1.*",
+    "illuminate/support": ">=5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "MammutAlex\\LardiTransLaravel\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "MammutAlex\\LardiTransLaravel\\LardiTransServiceProvider"
+      ]
+    }
+  }
+}
