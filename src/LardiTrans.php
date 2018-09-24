@@ -31,7 +31,14 @@ class LardiTrans
 
     private function getAuth()
     {
-        return $this->lardi->callMethod('auth', $this->config);
+        $data = [
+          'login'=>$this->config['login'],
+          'password'=>$this->config['password'],
+        ];
+        if(!$this->config['is_password_hash']){
+            $data['password'] = md5($data['password']);
+        }
+        return $this->lardi->callMethod('auth', $data);
     }
 
     private function addAuth($auth)
@@ -42,7 +49,7 @@ class LardiTrans
     private function testAuth()
     {
         try {
-            $this->lardi->callMethod('testSig', ['sig' => $this->lardi->getSig()]);
+            $this->lardi->callMethod('testSig');
         } catch (ApiErrorException $exception) {
             return false;
         }
