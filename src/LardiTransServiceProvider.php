@@ -28,7 +28,7 @@ class LardiTransServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             $this->getConfigFile(), 'larditrans'
         );
-        $this->app->singleton(LardiTrans::class, function ($app) {
+        $this->app->singleton(LardiTrans::class, function () {
             return new LardiTrans(config('larditrans'));
         });
     }

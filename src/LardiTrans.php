@@ -2,7 +2,7 @@
 
 namespace MammutAlex\LardiTransLaravel;
 
-use MammutAlex\LardiTrans\Exception\ApiErrorException;
+use MammutAlex\LardiTrans\Exception\ApiAuthException;
 use \MammutAlex\LardiTrans\LardiTrans as BaseLardi;
 use Illuminate\Support\Facades\Cache;
 
@@ -20,7 +20,12 @@ class LardiTrans
 
     public function __call(string $name, array $arguments): array
     {
-        return $this->lardi->callMethod($name, $arguments[0] ?? []);
+        try {
+            return $this->lardi->$name(...$arguments);
+        } catch (ApiAuthException $authException) {
+            $this->freshAuth();
+            return $this->lardi->$name(...$arguments);
+        }
     }
 
     private function setAuth()
@@ -29,36 +34,23 @@ class LardiTrans
             return $this->getAuth();
         });
         $this->addAuth($auth);
-        if (!$this->testAuth()) {
-            Cache::forever('larditrans.auth', $this->getAuth());
-        }
+    }
+
+    private function freshAuth()
+    {
+        $auth = $this->getAuth();
+        Cache::forever('larditrans.auth', $auth);
+        $this->addAuth($auth);
     }
 
     private function getAuth()
     {
-        $data = [
-            'login' => $this->config['login'],
-            'password' => $this->config['password'],
-        ];
-        if (!$this->config['is_password_hash']) {
-            $data['password'] = md5($data['password']);
-        }
-        return $this->lardi->callMethod('auth', $data);
+        return $this->lardi->sendAuth($this->config['login'], $this->config['password'], $this->config['is_password_hash']);
     }
 
     private function addAuth($auth)
     {
         $this->lardi->setUid($auth['uid'])->setSig($auth['sig']);
-    }
-
-    private function testAuth()
-    {
-        try {
-            $this->lardi->callMethod('testSig');
-        } catch (ApiErrorException $exception) {
-            return false;
-        }
-        return true;
     }
 
 }
